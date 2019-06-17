@@ -18,7 +18,7 @@ steps:
 - script: 
      pip install paramiko==2.4.2 &&
      pip install azureml-sdk[cli] &&
-     pip install azure-cli &&
+     pip install azure-cli 
   displayName: 'install azureml-sdk'
 
 
