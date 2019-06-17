@@ -11,6 +11,7 @@ import argparse
 import subprocess
 import logging
 import os
+import sys
 
 from azureml.core import Run
 
@@ -40,10 +41,49 @@ def create_arg_parser():
 
     return args 
 
+import logging
+import os
+import subprocess
+import sys
+import time
+
+test_logger = logging.getLogger(__name__)
+
+
+def check_output_custom(commands, cwd=None, stderr=subprocess.STDOUT, shell=False, stream_stdout=True, env=None):
+    """
+        Function is same as subprocess.check_output except verbose=True will stream command output
+        Modified from https://stackoverflow.com/questions/24489593/
+    """
+    if cwd is None:
+        cwd = os.getcwd()
+
+    t0 = time.perf_counter()
+    try:
+        test_logger.debug("Executing {0} in {1}".format(commands, cwd))
+        out = ""
+        with subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=stderr, cwd=cwd, shell=shell, env=env) as p:
+            test_logger.debug("Stream stdout is {}".format(stream_stdout))
+            for line in p.stdout:
+                line = line.decode("utf-8").rstrip() + "\n"
+                if stream_stdout:
+                    sys.stdout.write(line)
+                out += line
+            p.communicate()
+            retcode = p.wait()
+            if retcode:
+                raise subprocess.CalledProcessError(retcode, p.args, output=out, stderr=p.stderr)
+        return out
+    finally:
+        t1 = time.perf_counter()
+        test_logger.debug("Execution took {0}s for {1} in {2}".format(t1 - t0, commands, cwd))
+
 
 if __name__ == "__main__":
     logger = logging.getLogger("submit_azureml_pytest.py")
     args = create_arg_parser()
+
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     logger.debug('junit_xml', args.xmlname)
 
@@ -64,7 +104,7 @@ if __name__ == "__main__":
                  "-m",
                  args.testmarkers,
                  "--junitxml="+args.xmlname])
-    subprocess.run(["pytest",
+    check_output_custom(["pytest",
                     args.testfolder,
                     "-m",
                     args.testmarkers,
