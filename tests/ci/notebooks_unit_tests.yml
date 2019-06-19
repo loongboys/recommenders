@@ -17,8 +17,8 @@ trigger: none
 pr: none
 
 jobs:
-- job : Smoke
-  displayName : 'Smoke: notebooks_unit_test'
+- job : notebooks_unit_tests
+  displayName : 'notebooks_unit_tests'
   pool:
     vmImage: 'ubuntu-16.04'
 
@@ -26,15 +26,15 @@ jobs:
   variables:
   - group: AzureKeyVaultSecrets
   - name  : 'testfolder'
-    value : './tests/smoke'
+    value : './tests/unit'
   - name  : 'testmarkers'
     value : '"not vw and notebooks and not spark and not gpu"'
   - name  : 'junitxml'
-    value : 'reports/test-smoke.xml'
+    value : 'reports/test-unit.xml'
   - name  : 'clustername'
     value : 'reco-nightly-cpu'
   - name  : 'expname'
-    value : 'notebooks_smoke_cpu'
+    value : 'notebooks_unit_cpu'
 
   steps:
 
@@ -50,48 +50,6 @@ jobs:
 
   - script: 
       python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testfolder $(testfolder) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
-    displayName: 'submit_azureml_pytest'
-
-  - task: PublishTestResults@2
-    displayName: 'Publish Test Results **/test-*.xml'
-    inputs:
-      testResultsFiles: '**/test-*.xml'
-      failTaskOnFailedTests: true
-    condition: succeededOrFailed()
-
-- job : Integration
-  displayName : 'Integration: notebooks_cpu_test'
-  pool:
-    vmImage: 'ubuntu-16.04'
-
-# vars specific to this job
-  variables:
-  - group: AzureKeyVaultSecrets
-  - name  : 'testfolder'
-    value : './tests/integration'
-  - name  : 'testmarkers'
-    value : '"not vw and integration and not spark and not gpu"'
-  - name  : 'junitxml'
-    value : 'reports/test-integration.xml'
-  - name  : 'clustername'
-    value : 'reco-nightly-cpu'
-  - name  : 'expname'
-    value : 'notebooks_integration_cpu'
-
-  steps:
-
-  - script: | 
-      az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
-    displayName: 'Login to Azure'
-
-  - template: env-setup.yml # template reference
-
-  - script: 
-      python scripts/generate_conda_file.py --name reco 
-    displayName: ' generate_conda_file.py'
-
-  - script: 
-      python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID)  --testfolder $(testfolder) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
     displayName: 'submit_azureml_pytest'
 
   - task: PublishTestResults@2
