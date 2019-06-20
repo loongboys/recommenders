@@ -12,8 +12,8 @@ import subprocess
 import logging
 import os
 import sys
-
 from azureml.core import Run
+import time
 
 
 def create_arg_parser():
@@ -39,20 +39,21 @@ def create_arg_parser():
                         help="Test results")
     args = parser.parse_args()
 
-    return args 
+    return args
 
-import logging
-import os
-import subprocess
-import sys
-import time
 
 test_logger = logging.getLogger(__name__)
 
 
-def check_output_custom(commands, cwd=None, stderr=subprocess.STDOUT, shell=False, stream_stdout=True, env=None):
+def check_output_custom(commands,
+                        cwd=None,
+                        stderr=subprocess.STDOUT,
+                        shell=False,
+                        stream_stdout=True,
+                        env=None):
     """
-        Function is same as subprocess.check_output except verbose=True will stream command output
+        Function is same as subprocess.check_output except verbose=True
+        will stream command output
         Modified from https://stackoverflow.com/questions/24489593/
     """
     if cwd is None:
@@ -62,7 +63,12 @@ def check_output_custom(commands, cwd=None, stderr=subprocess.STDOUT, shell=Fals
     try:
         test_logger.debug('Executing {0} in {1}'.format(commands, cwd))
         out = ""
-        with subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=stderr, cwd=cwd, shell=shell, env=env) as p:
+        with subprocess.Popen(commands,
+                              stdout=subprocess.PIPE,
+                              stderr=stderr,
+                              cwd=cwd,
+                              shell=shell,
+                              env=env) as p:
             test_logger.debug('Stream stdout is {}'.format(stream_stdout))
             for line in p.stdout:
                 line = line.decode('utf-8').rstrip() + '\n'
@@ -72,11 +78,15 @@ def check_output_custom(commands, cwd=None, stderr=subprocess.STDOUT, shell=Fals
             p.communicate()
             retcode = p.wait()
             if retcode:
-                raise subprocess.CalledProcessError(retcode, p.args, output=out, stderr=p.stderr)
+                raise subprocess.CalledProcessError(retcode,
+                                                    p.args,
+                                                    output=out,
+                                                    stderr=p.stderr)
         return out
     finally:
         t1 = time.perf_counter()
-        test_logger.debug("Execution took {0}s for {1} in {2}".format(t1 - t0, commands, cwd))
+        test_logger.debug("Execution took {0}s for {1} in {2}".format(
+                          t1 - t0, commands, cwd))
 
 
 if __name__ == "__main__":
@@ -97,18 +107,18 @@ if __name__ == "__main__":
                     "--junitxml=reports/test-unit.xml"])
     '''
     logger.debug('args.junitxml {0}'.format(args.xmlname))
-    logger.info('pytest run:  [pytest, {0} "-m" {1} "--junitxml={2}" ]'.format(args.testfolder,args.testmarkers,
-                 +args.xmlname))
+    logger.info('pytest run:  [pytest, {0} "-m" {1} "--junitxml={2}" ]'.format(
+                 args.testfolder, args.testmarkers, args.xmlname))
 
     check_output_custom(["pytest",
-                    args.testfolder,
-                    "-m",
-                    args.testmarkers,
-                    "--junitxml="+args.xmlname])
+                         args.testfolder,
+                         "-m",
+                         args.testmarkers,
+                         "--junitxml="+args.xmlname])
     #
     # Leveraged code from this  notebook:
     # https://msdata.visualstudio.com/Vienna/_search?action=contents&text=upload_folder&type=code&lp=code-Project&filters=ProjectFilters%7BVienna%7DRepositoryFilters%7BAzureMlCli%7D&pageSize=25&sortOptions=%5B%7B%22field%22%3A%22relevance%22%2C%22sortOrder%22%3A%22desc%22%7D%5D&result=DefaultCollection%2FVienna%2FAzureMlCli%2FGBmaster%2F%2Fsrc%2Fazureml-core%2Fazureml%2Fcore%2Frun.py
-    logger.debug('os.listdir files {}'.format( os.listdir('.')))
+    logger.debug('os.listdir files {}'.format(os.listdir('.')))
     logger.debug('os.listdir reports {0}'.format(os.listdir('./reports')))
 
     #  files for AzureML

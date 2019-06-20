@@ -73,8 +73,8 @@ def setup_workspace(workspace_name, subscription_id, resource_group, cli_auth,
     """
     logger.debug('setup: workspace_name is {0}'.format(workspace_name))
     logger.debug('setup: resource_group is {0}'.format(resource_group))
-    logger.debug('setup: subid is {0}'.format( subscription_id))
-    logger.debug('setup: location is {0}'.format( location))
+    logger.debug('setup: subid is {0}'.format(subscription_id))
+    logger.debug('setup: location is {0}'.format(location))
 
     try:
             # use existing workspace if there is one
@@ -219,8 +219,8 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
           run : AzureML run or trial
     """
 
-    logger.debug('submit: testfolder {0}'.format( test_folder))
-    logger.debug('junitxml: {0}'.format( junitxml))
+    logger.debug('submit: testfolder {0}'.format(test_folder))
+    logger.debug('junitxml: {0}'.format(junitxml))
     project_folder = "."
 
     script_run_config = ScriptRunConfig(source_directory=project_folder,
@@ -240,7 +240,7 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
     # test logs can also be found on azure
     # go to azure portal to see log in azure ws and look for experiment name
     # and look for individual run
-    logger.debug('files {0}'.format( run.get_file_names))
+    logger.debug('files {0}'.format(run.get_file_names))
 
     return run
 
