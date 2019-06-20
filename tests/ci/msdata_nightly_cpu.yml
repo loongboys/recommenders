@@ -28,12 +28,11 @@ jobs:
     displayName: 'smoke test'
 
   - task: PublishTestResults@2
-      displayName: 'Publish Test Results **/test-*.xml'
       inputs:
         testResultsFiles: '**/test-*.xml'
         failTaskOnFailedTests: true
       condition: succeededOrFailed()
-    displayName: 'publish'
+    displayName: 'Publish Test Results **/test-*.xml'
 
 - job : Integration
   displayName : 'Integration: nightly_cpu_test'
