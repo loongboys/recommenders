@@ -25,12 +25,13 @@ jobs:
       pytest tests/smoke -m "smoke and not spark and not gpu" --junitxml=reports/test-smoke.xml      
     displayName: 'smoke test'
 
-    - task: PublishTestResults@2
+  - task: PublishTestResults@2
       displayName: 'Publish Test Results **/test-*.xml'
       inputs:
         testResultsFiles: '**/test-*.xml'
         failTaskOnFailedTests: true
       condition: succeededOrFailed()
+    displayName: 'publish'
 
 - job : Integration
   displayName : 'Integration: nightly_cpu_test'
