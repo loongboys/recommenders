@@ -97,7 +97,6 @@ if __name__ == "__main__":
                     "--junitxml=reports/test-unit.xml"])
     '''
     logger.debug('args.junitxml {0}'.format(args.xmlname))
-    logger.debug('junit= --junitxml= {0}'.format(+args.xmlname))
     logger.info('pytest run:  [pytest, {0} "-m" {1} "--junitxml={2}" ]'.format(args.testfolder,args.testmarkers,
                  +args.xmlname))
 
