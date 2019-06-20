@@ -129,7 +129,7 @@ def setup_persistent_compute_target(workspace, cluster_name, vm_size,
         cpu_cluster = ComputeTarget(workspace=workspace, name=cluster_name)
         logger.debug('setup: Found existing cluster, use it.')
     except ComputeTargetException:
-        logger.debug('setup: create cluster)
+        logger.debug('setup: create cluster')
         compute_config = AmlCompute.provisioning_configuration(
                        vm_size=vm_size,
                        max_nodes=max_nodes)
