@@ -76,7 +76,7 @@ jobs:
   - name  : 'testmarkers'
     value : '"not vw and integration and not spark and not gpu"'
   - name  : 'junitxml'
-    value : 'reports/test-integration.xml'
+    value : 'reports/test-int.xml'
   - name  : 'clustername'
     value : 'reco-nightly-cpu'
   - name  : 'expname'
