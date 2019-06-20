@@ -32,7 +32,7 @@ jobs:
   - name  : 'junitxml'
     value : 'reports/test-smoke.xml'
   - name  : 'clustername'
-    value : 'reco-nightly-cpu'
+    value : 'reco-nightly-c2'
   - name  : 'expname'
     value : 'nightly_smoke_cpu'
 
