@@ -28,10 +28,10 @@ jobs:
     displayName: 'smoke test'
 
   - task: PublishTestResults@2
-      inputs:
-        testResultsFiles: '**/test-*.xml'
-        failTaskOnFailedTests: true
-      condition: succeededOrFailed()
+    inputs:
+      testResultsFiles: '**/test-*.xml'
+      failTaskOnFailedTests: true
+    condition: succeededOrFailed()
     displayName: 'Publish Test Results **/test-*.xml'
 
 - job : Integration
