@@ -18,9 +18,12 @@ jobs:
   steps:
 
   - script:
-      python ./scripts/generate_conda_file.py --name nightly_reco_base && \
-      conda env create --quiet -f nightly_reco_base.yaml 2> log
+      python ./scripts/generate_conda_file.py --name nightly_reco_base
     displayName: 'generate_conda_file.py'
+
+  - script:
+      conda env create --quiet -f nightly_reco_base.yaml 2> log
+    displayName: 'create conda env'
 
   - script: 
       conda activate nightly_reco_base && \
