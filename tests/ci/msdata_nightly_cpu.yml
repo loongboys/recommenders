@@ -27,6 +27,9 @@ jobs:
 
   - script:
       ls && \
+      echo $PATH && \
+      which python && \
+      pip install conda && \
       conda list && \
       conda list --explicit && \
       source activate nightly_reco_base && \
