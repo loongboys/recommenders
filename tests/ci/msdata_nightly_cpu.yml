@@ -25,8 +25,11 @@ jobs:
       conda env create --quiet -f nightly_reco_base.yaml 2> log
     displayName: 'create conda env'
 
-  - script: 
-      conda activate nightly_reco_base && \
+  - script:
+      ls && \
+      conda list && \
+      conda list --explicit && \
+      source activate nightly_reco_base && \
       pytest tests/smoke -m "smoke and not spark and not gpu" --junitxml=reports/test-smoke.xml      
     displayName: 'smoke test'
 
