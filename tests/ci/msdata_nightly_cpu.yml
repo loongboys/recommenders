@@ -33,7 +33,6 @@ jobs:
 
   - script:
       ls && \
-      pip install conda && \
       conda list && \
       conda list --explicit && \
       source activate nightly_reco_base && \
