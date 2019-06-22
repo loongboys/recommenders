@@ -33,8 +33,6 @@ jobs:
 
   - script:
       ls && \
-      conda list && \
-      conda list --explicit && \
       source activate nightly_reco_base && \
       pytest tests/smoke -m "smoke and not spark and not gpu" --junitxml=reports/test-smoke.xml      
     displayName: 'smoke test'
