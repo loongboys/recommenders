@@ -17,6 +17,12 @@ jobs:
 
   steps:
 
+  - task: UsePythonVersion
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true 
+    displayName: 'set python version'
+  
   - script:
       python ./scripts/generate_conda_file.py --name nightly_reco_base
     displayName: 'generate_conda_file.py'
